@@ -8,7 +8,53 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    
+    <header>
+        <h1 id="title">PrestoWise</h1>
+        <p id="subtitle">Presto OneFare Calculator</p>
+    </header>
+    <main>
+        <section class="main-section">
+            <details>
+                <summary class="summary"><h2>Instructions</h2></summary>
+                <div class="flex">
+                    <video width="201" height="457"  autoplay muted loop playsinline>
+                        <source src="assets/Instructions.mp4" type="video/mp4">
+                        Your browser does not support the 
+                    </video>
+                    <ol>
+                        <li>Select your route</li>
+                        <li>Expand transit details</li>
+                        <li>Copy</li>
+                        <li>Paste below!</li>
+                    </ol>
+                </div>
+            </details>
+        </section>
+        <section class="main-section">
+            <h2>Input</h2>
+            <div class="user-info">
+                <section>
+                    <h3 class="input-h3">Trip</h3>
+                    <textarea id="input" cols="50" rows="20" placeholder="Paste your route here!"></textarea>
+                </section>
+                <section>
+                    <h3 class="input-h3">Age Group</h3>
+                    <select>
+                        <option selected value="Adult">Adult</option>
+                        <option value="Senior">Senior &gt;65</option>
+                        <option value="Youth">Youth 13-19</option>
+                        <option value="Child">Child &lt;12</option>
+                    </select>
+                </section>
+            </div>
+        </section>
+        <section class="main-section">
+            <h2>Cost Breakdown</h2>
+            <section id="output">
+                
+            </section>
+        </section>
+    </main>
 
     <script src="js/app.js"></script>
 </body>
