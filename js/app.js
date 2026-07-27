@@ -2,20 +2,32 @@ import { fares } from "./fares.js";
 
 const inputEl = document.getElementById("input");
 const outputEl = document.getElementById("output");
+const outputSection = document.getElementById("output-section");
 const ageGroupEl = document.getElementById("age-group");
 const instructionsEl = document.querySelector(".summary");
 const instructionVideo = document.getElementById("instruction-video");
+const detailsEl = document.querySelector("details");
+
+
+detailsEl.addEventListener('toggle', (event) => {
+    if (detailsEl.open) {
+        detailsEl.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start' 
+        });
+    }
+});
 
 let ageGroup = ageGroupEl.value;
 ageGroupEl.addEventListener("change", () => {
     ageGroup = ageGroupEl.value;
+    calculateFare(parseInput(userInput));
 });
 
-let input = inputEl.value;
+let userInput = inputEl.value;
 inputEl.addEventListener("input", () => {
-    input = inputEl.value;
-    
-    calculateFare(parseInput(input));
+    userInput = inputEl.value;
+    calculateFare(parseInput(userInput));
 
 });
 
@@ -145,7 +157,7 @@ const calculateFare = parsedInput =>    {
                 leg.discountAmount = 0;
                 leg.discountText = "";
                 
-                // Store this fare so we can deduct it if they transfer to GO later
+                // Store this fare in case they transfer to GO later (deduct)
                 activeLocalFare = leg.cost; 
 
             } else {
@@ -158,6 +170,11 @@ const calculateFare = parsedInput =>    {
         }
     }
     renderLegCards(legs);
+
+    outputSection.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'start' 
+    });
 }
 
 const renderLegCards = (legs) => {
@@ -185,8 +202,8 @@ const renderLegCards = (legs) => {
         let discountUI = leg.discountText ? `<div class="discount-text">Save $${leg.discountAmount.toFixed(2)} from ${leg.discountText}</div>` : "";
 
         return `
-            <div class="leg-card">
-                <h3>${leg.provider} - ${leg.mode} ${leg.route}</h3>
+            <div class="leg-card" data-provider="${leg.provider}">
+                <h3>${leg.provider} - ${getModeIconHTML(leg.mode)} ${leg.route}</h3>
                 <p><b>Board:</b> ${leg.boardTime} @ ${leg.boardStop}</p>
                 <p><b>Alight:</b> ${leg.alightTime} @ ${leg.alightStop || "Destination"}</p>
                 <div class="fare-section">
@@ -252,4 +269,15 @@ const updateGrandTotal = (legs) => {
 };
 
 
+const modeIcons = {
+    bus: 'assets/icons/bus.svg',
+    subway: 'assets/icons/subway.svg',
+    streetcar: 'assets/icons/streetcar.svg',
+    train: 'assets/icons/train.svg'
+};
 
+const getModeIconHTML = mode => {
+    const key = mode ? mode.toLowerCase() : '';
+    const iconSrc = modeIcons[key] || 'assets/icons/bus.svg'; // Fallback icon
+    return `<img src="${iconSrc}" alt="${mode}" class="mode-icon" />`;
+};

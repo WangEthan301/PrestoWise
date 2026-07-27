@@ -1,0 +1,55 @@
+
+
+h1  {
+    font-family: Neuton, serif;
+    text-align: center;
+    font-size:100px;
+    font-weight: 700;
+    margin: 0px;
+}
+
+#subtitle   {
+    text-align: center;
+    font-size: 25px;
+    font-family: Inter, sans-serif;
+}
+
+header  {
+    margin: 0px;
+    padding: 20px 0px;
+    background-color: #bad879;
+    border-radius: 0rem 0rem 2rem 2rem;
+}
+
+footer{
+    text-align: center;
+    color: white;
+    background-color: black;
+    padding: 10px;
+}
+
+.main-section {
+    margin-top: 30px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    background: #ffffff;
+    padding: 10px 30px;
+    border-radius: 16px;
+}
+
+.summary > *{
+    display: inline;
+}
+
+.flex   {
+    display: flex;
+}
+
+/* Footer Disclaimer */
+footer p {
+    margin: 0 auto;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}

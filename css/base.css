@@ -1,0 +1,25 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+* {
+    box-sizing: border-box; /* Prevents padding from adding to element width */
+}
+
+/* Chrome, Safari, Opera, and Newer Edge */
+body::-webkit-scrollbar {
+  display: none;
+}
+
+html, body{
+    margin: 0;
+    padding: 0;
+    font-family: "Open Sans", sans-serif;
+    scrollbar-width: none; 
+}
+
+/* Layout & Page Background */
+body {
+    background-color: #f8fafc;
+    color: #1e293b;
+    padding-bottom: 0; /* Lets footer sit flush at the bottom */
+}

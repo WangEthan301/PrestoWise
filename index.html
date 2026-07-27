@@ -6,11 +6,13 @@
     <title>PrestoWise</title>
     <meta name="description" content="Presto OneFare calculator">
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
+
 <body>
     <header>
         <h1 id="title">PrestoWise</h1>
-        <p id="subtitle">Presto OneFare Calculator</p>
+        <p id="subtitle">Calculate cross agency transit fares and Presto One Fare savings instantly</p>
     </header>
     <main>
         <section class="main-section">
@@ -35,7 +37,7 @@
             <div class="user-info">
                 <section>
                     <h3 class="input-h3">Trip</h3>
-                    <textarea id="input" cols="50" rows="20" placeholder="Paste your route here!"></textarea>
+                    <textarea id="input" cols="50" rows="7" placeholder="Paste your route here!"></textarea>
                 </section>
                 <section>
                     <h3 class="input-h3">Age Group</h3>
@@ -48,13 +50,17 @@
                 </section>
             </div>
         </section>
-        <section class="main-section">
+        <section class="main-section" id="output-section">
             <h2>Cost Breakdown</h2>
             <section id="output">
 
             </section>
         </section>
     </main>
+
+    <footer>
+        <p>Disclaimer: PrestoWise is an independent, open-source calculator tool and is not affiliated with, endorsed by, or partnered with Metrolinx, PRESTO, or any transit agencies (TTC, MiWay, GO Transit, Oakville Transit, York Region Transit, Burlington Transit, Hamilton Street Railway, Brampton Transit, Durham Region Transit). All trademarks belong to their respective owners.</p>
+    </footer>
 
     <script type="module" src="js/app.js"></script>
 </body>

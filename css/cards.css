@@ -1,0 +1,163 @@
+/* Cost Breakdown & Leg Cards */
+.leg-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 6px solid #bad879;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* TTC - Official Red */
+.leg-card[data-provider="TTC"] {
+    border-left-color: #da291c;
+}
+.leg-card[data-provider="TTC"] h3 {
+    color: #da291c;
+}
+
+/* MiWay - Official Orange */
+.leg-card[data-provider="MiWay"] {
+    border-left-color: #ff6600;
+}
+.leg-card[data-provider="MiWay"] h3 {
+    color: #ff6600;
+}
+
+/* GO Transit - Official Green */
+.leg-card[data-provider="GO Transit"] {
+    border-left-color: #00853f;
+}
+.leg-card[data-provider="GO Transit"] h3 {
+    color: #00853f;
+}
+
+/* Brampton Transit - Orange */
+.leg-card[data-provider="Brampton Transit"] {
+    border-left-color: #e35205;
+}
+
+/* YRT (York Region Transit) - Blue */
+.leg-card[data-provider="York Region Transit"] {
+    border-left-color: #005596;
+}
+
+/* Oakville Transit - Navy Blue */
+.leg-card[data-provider="Oakville Transit"] {
+    border-left-color: #003b71;
+}
+
+/* Durham Region Transit - Dark Green */
+.leg-card[data-provider="Durham Region Transit"] {
+    border-left-color: #006837;
+}
+
+.leg-card h3 {
+    margin-top: 0;
+    color: #0f172a;
+    font-size: 1.15rem;
+}
+
+.leg-card p {
+    margin: 8px 0;
+    color: #475569;
+    font-size: 0.95rem;
+}
+
+.fare-section {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed #cbd5e1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.fare-input-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.fare-input-group label {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.go-cost-input {
+    width: 90px;
+    padding: 8px 12px;
+    border: 2px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.go-cost-input:focus {
+    outline: none;
+    border-color: #bad879;
+}
+
+.fare-input-group a {
+    color: #2563eb;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.fare-input-group a:hover {
+    text-decoration: underline;
+}
+
+.leg-final-cost {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.discount-text {
+    background-color: #ecfdf5;
+    color: #065f46;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* Grand Total Card */
+.grand-total-card {
+    background: #292729;
+    color: #ffffff;
+    padding: 24px 30px;
+    border-radius: 12px;
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.grand-total-card h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.grand-total-card span {
+    font-weight: 700;
+    color: #bad879;
+}
+
+.mode-icon {
+    width: 22px;
+    height: 22px;
+    vertical-align: middle;
+    margin: 0 6px;
+    display: inline-block;
+}
