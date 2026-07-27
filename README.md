@@ -10,9 +10,7 @@ PrestoWise is an open-source web application designed for commuters who use mult
 
 ## 🌐 Demo
 
-Try PrestoWise here:
-
-https://wangethan301.github.io/PrestoWise/
+Try PrestoWise here: https://wangethan301.github.io/PrestoWise/
 
 Video Demo: https://youtu.be/1ohvGHeRx08?si=1fJTpW3ti3KlLQ0f
 
