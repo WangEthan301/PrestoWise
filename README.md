@@ -6,6 +6,13 @@ PrestoWise is an open-source web application designed for commuters who use mult
 
 <img width="1920" height="1000" alt="image" src="https://github.com/user-attachments/assets/8871b35a-7a01-4885-b9d0-505171862df5" />
 
+---
+
+## 🌐 Live Demo
+
+Try PrestoWise here:
+
+https://wangethan301.github.io/PrestoWise/
 
 ---
 
@@ -57,14 +64,6 @@ PrestoWise is an open-source web application designed for commuters who use mult
 * **CSS** — Styling and responsive layout
 * **JavaScript** — Trip parsing, fare calculations, and One Fare logic
 * **GitHub Pages** — Hosting and deployment
-
----
-
-## 🌐 Live Demo
-
-Try PrestoWise here:
-
-https://wangethan301.github.io/PrestoWise/
 
 ---
 
