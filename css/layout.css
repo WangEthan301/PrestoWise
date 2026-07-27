@@ -21,13 +21,6 @@ header  {
     border-radius: 0rem 0rem 2rem 2rem;
 }
 
-footer{
-    text-align: center;
-    color: white;
-    background-color: black;
-    padding: 10px;
-}
-
 .main-section {
     margin-top: 30px;
     max-width: 800px;
@@ -51,5 +44,26 @@ footer{
 footer p {
     margin: 0 auto;
     font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+footer {
+    text-align: center;
+    padding: 30px 20px;
+    font-size: 0.9rem;
+    color: #475569;
+    background-color: #e1e1e1;
+}
+
+footer .copyright {
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+footer .disclaimer {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    max-width: 800px;
+    margin: 0 auto;
     line-height: 1.5;
 }
