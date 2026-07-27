@@ -7,6 +7,9 @@ const ageGroupEl = document.getElementById("age-group");
 const instructionsEl = document.querySelector(".summary");
 const instructionVideo = document.getElementById("instruction-video");
 const detailsEl = document.querySelector("details");
+const multiEl = document.getElementById('multi');
+const numMultiEl = document.getElementById(`numMulti`);
+const singleEl = document.getElementById(`single`);
 
 
 detailsEl.addEventListener('toggle', (event) => {
@@ -18,6 +21,46 @@ detailsEl.addEventListener('toggle', (event) => {
     }
 });
 
+multiEl.addEventListener("click",() =>  {
+    for(let i = 0; i < numMultiEl.value; i++)   {
+        inputEl.value += `8:07 AM
+Dundas St At Poplar Ave
+8:11 AM
+Bus112BWest Mall to Renforth Station
+4 min (4 stops) · Stop ID: 5022 ·
+Service run by TTC
+Ticket information
+`
+    }
+    inputEl.value+=`8:18 AM
+Dundas St West at East Mall Cres
+Bus109109 N Express Meadowvale Exp
+52 min (16 stops) · Stop ID: 0815 ·
+Service run by MiWay
+Ticket information
+9:10 AM
+Winston Churchill Blvd At Britannia Rd
+`
+    inputEl.dispatchEvent(new Event("input"));
+})
+
+
+singleEl.addEventListener("click",() =>  {   {
+    inputEl.value += `9:20 AM
+Square One, Mississauga
+Bus25A - U of Waterloo
+1 hr 21 min (5 stops) on time · Stop ID: 100133 ·
+University of Waterloo Terminal
+Service run by GO Transit
+Ticket information
+10:41 AM
+University of Waterloo Terminal
+`
+    }
+    inputEl.dispatchEvent(new Event("input"));
+})
+
+
 let ageGroup = ageGroupEl.value;
 ageGroupEl.addEventListener("change", () => {
     ageGroup = ageGroupEl.value;
@@ -26,6 +69,7 @@ ageGroupEl.addEventListener("change", () => {
 
 let userInput = inputEl.value;
 inputEl.addEventListener("input", () => {
+    console.log(true);
     userInput = inputEl.value;
     calculateFare(parseInput(userInput));
 
@@ -49,6 +93,12 @@ const parseInput = rawText => {
     const singleLegSegment = /((?:0?[1-9]|1[0-2]):[0-5][0-9] (?:AM|PM))\s(.+?)\s(bus|subway|streetcar|train)\s*(.+)[\s\S]*?Service run by (.+)[\s\S]*?((?:0?[1-9]|1[0-2]):[0-5][0-9] (?:AM|PM))\s*(.+)/i;
 
     for(let i = 0; i < segments.length; i++)    {
+        const match = segments[i].match(singleLegSegment);
+        if (!match) {
+            console.error("Could not parse input");
+            continue;
+        }
+
         let rides = segments[i].match(globalRegexMetadata).length;
         if(rides>1) {
             let lastIndex = 0;

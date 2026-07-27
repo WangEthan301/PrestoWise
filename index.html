@@ -26,8 +26,8 @@
                     <ol>
                         <li>Select your route</li>
                         <li>Expand transit details</li>
-                        <li>Copy</li>
-                        <li>Paste below!</li>
+                        <li>Copy (from Firefox)</li>
+                        <li>Paste below! (if using Firefox) or insert format</li>
                     </ol>
                 </div>
             </details>
@@ -36,7 +36,14 @@
             <h2>Input</h2>
             <div class="user-info">
                 <section>
-                    <h3 class="input-h3">Trip</h3>
+                    <div class="flex">
+                        <h3 class="input-h3">Trip</h3>
+                        <fieldset>
+                            <button id="multi">Multi Leg</button>
+                            <input value="1" min="1" id="numMulti" type="number" size="1">
+                        </fieldset>
+                        <button id="single">Single Leg</button>
+                    </div>
                     <textarea id="input" cols="50" rows="7" placeholder="Paste your route here!"></textarea>
                 </section>
                 <section>
