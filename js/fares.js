@@ -1,9 +1,7 @@
 export const fares = {
-    transferWindow: 120,
     "GO Transit": {
-        newTransferWindow: 180
     },
-    "Miway": {
+    "MiWay": {
         Adult: 3.50,
         Senior: 0.00,
         Youth: 2.90,

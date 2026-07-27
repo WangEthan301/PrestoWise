@@ -14,6 +14,9 @@ ageGroupEl.addEventListener("change", () => {
 let input = inputEl.value;
 inputEl.addEventListener("input", () => {
     input = inputEl.value;
+    
+    calculateFare(parseInput(input));
+
 });
 
 instructionsEl.addEventListener("click",() => instructionVideo.currentTime = 0);
@@ -21,15 +24,15 @@ instructionsEl.addEventListener("click",() => instructionVideo.currentTime = 0);
 
 const parseInput = rawText => {
 
-    const providers = "GO Transit|Miway|TTC|York Region Transit|Oakville Transit|Burlington Transit|Hamilton Street Railway|Brampton Transit|Durham Region Transit)"
     const cleanText = rawText.replaceAll("\u202f", ' ').replaceAll(RegExp("\r?\n",'g'), '\n');
 
-    const regexMetadata = /\(\d+\sstops\)/i;
-    const globalRegexMetadata = /\(\d+\sstops\)/ig;
+    const regexMetadata = /\(\d+\sstops\)|\(non-stop\)/i;
+    const globalRegexMetadata = /\(\d+\sstops\)|\(non-stop\)/ig;
     let segments = cleanText.split('\n\n').map(l => l.trim()).filter(l => regexMetadata.test(l));
 
     let legs = [];
 
+    //multiple bus rides in one segment (same alight stop as board stop)
     const multiLegSegment = /((?:0?[1-9]|1[0-2]):[0-5][0-9] (?:AM|PM))\s(.+?)\s((?:0?[1-9]|1[0-2]):[0-5][0-9] (?:AM|PM))\s*(bus|subway|streetcar|train)\s*(.+)[\s\S]*?Service run by (.+)/i;
     const singleLegSegment = /((?:0?[1-9]|1[0-2]):[0-5][0-9] (?:AM|PM))\s(.+?)\s(bus|subway|streetcar|train)\s*(.+)[\s\S]*?Service run by (.+)[\s\S]*?((?:0?[1-9]|1[0-2]):[0-5][0-9] (?:AM|PM))\s*(.+)/i;
 
@@ -44,22 +47,21 @@ const parseInput = rawText => {
                 segments[i] = segments[i].slice(lastIndex);
                 if(j>0) {
                     legs[j-1].alightStop = boardStop;
+                    //set board stop as previous alight stop
                 }
             }
-            console.log(`last index: ${segments[i]}`);
             let [full, boardTime,boardStop,mode, route,provider,alightTime,alightStop] = segments[i].match(singleLegSegment);
             legs.push({boardTime:boardTime,boardStop:boardStop,alightTime:alightTime,mode:mode,route:route,provider:provider,alightStop:alightStop});
             legs[rides-2].alightStop = boardStop;
 
         }
         else    {
-            console.log("single");
             let [full, boardTime,boardStop,mode, route,provider,alightTime,alightStop] = segments[i].match(singleLegSegment);
             legs.push({boardTime:boardTime,boardStop:boardStop,alightTime:alightTime,mode:mode,route:route,provider:provider,alightStop:alightStop});
         }
     }
 
-    console.log(legs);
+    // console.log(legs);
     return legs;
 }
 
@@ -95,182 +97,159 @@ const minutesPassed = (startTimeStr, endTimeStr) => {
     return diff;
 };
 
+const hasGoTransit = legs => legs.some(leg => leg.provider === "GO Transit");
+
+const calculateFare = parsedInput =>    {
+
+    const legs = [...parsedInput];
+
+    let transferWindow = 120;
+    let transferWindowBegin = legs[0].boardTime;
+    let activeLocalFare = 0;
 
 
-const test1 = `
-9:53 AM
-Kipling Bus Terminal
-Etobicoke, ON M9B 6H8
-WalkWalk
-About 2 min, 160 m
+    for(let i = 0; i < legs.length; i++)    {
+        const leg = legs[i];
+        let passedTime = minutesPassed(transferWindowBegin, leg.boardTime);
+        let isValidTransfer = passedTime < transferWindow;
+        const isGoTransit = leg.provider === "GO Transit";
 
-9:55 AM
-Dundas St At Poplar Ave
-9:57 AM
-Bus111East Mall Eglinton
-2 min (4 stops) · Stop ID: 5022 ·
-9:56 AM
-Dundas St West at Wilmar Rd
-9:57 AM
-Dundas St At Shaver Ave
-9:57 AM
-Dundas St West at Paulart Dr
-Service run by TTC
-Ticket information
-10:03 AM
-Dundas St West at East Mall Cres
-Bus109109 N Express Meadowvale Exp
-46 min (16 stops) · Stop ID: 0815 ·
-10:12 AM
-Renforth Station West Platform 1
-10:13 AM
-Orbitor Station West Platform B
-10:15 AM
-Spectrum Station West Platform B
-10:16 AM
-Etobicoke Creek Station West Platform B
-10:18 AM
-Tahoe Station West Platform B
-10:20 AM
-Dixie station
-10:21 AM
-Tomken Station East Platform A
-10:22 AM
-Cawthra Station East Platform A
-10:24 AM
-Central Parkway Station West Platform B
-10:26 AM
-City Centre Transit Terminal Platform O
-10:37 AM
-Erin Mills Station West Platform 4
-10:39 AM
-Winston Churchill Station West Platform 4
-10:42 AM
-Winston Churchill Blvd At Eglinton Ave
-10:44 AM
-Winston Churchill Blvd At Erin Centre Blvd
-10:46 AM
-Winston Churchill Blvd At Thomas St
-Service run by MiWay
-Ticket information
-10:49 AM
-Winston Churchill Blvd At Britannia Rd
-WalkWalk
-About 10 min, 750 m
+        // If the transfer expired, reset the clock and limits for this new leg
+        if (!isValidTransfer) {
+            transferWindowBegin = leg.boardTime;
+            transferWindow = isGoTransit ? 180 : 120;
+            activeLocalFare = 0; 
+        }
 
-10:59 AM
-2866 Termini Terrace
-Mississauga, ON L5M 5S3
-`
+        if (isGoTransit) {
+            // Case 1: GO Transit Leg
+            leg.cost = 0; 
+            leg.requiresUserInput = true;
+            
+            // If valid transfer, apply the local fare we paid earlier as a discount
+            leg.discountAmount = isValidTransfer ? activeLocalFare : 0;
+            leg.discountText = leg.discountAmount > 0 
+                ? `One Fare (Local Transit Fare Discount)` 
+                : "Enter full GO fare";
+            
+            // GO Transit expands the window to 3 hours (180 mins) for any subsequent legs
+            if (!isValidTransfer || i === 0) {
+                transferWindow = 180;
+            }
 
+        } else {
+            if (i === 0 || !isValidTransfer) {
+                // Case 2: First leg (no GO) OR an expired transfer window -> Pay flat fare
+                leg.cost = fares[leg.provider][ageGroup]; 
+                leg.requiresUserInput = false;
+                leg.discountAmount = 0;
+                leg.discountText = "";
+                
+                // Store this fare so we can deduct it if they transfer to GO later
+                activeLocalFare = leg.cost; 
 
-const test2 = `
-1:42 PM
-The Woodlands School - Secondary
-3225 Erindale Station Rd, Mississauga, ON L5C 1Y5
-WalkWalk
-About 3 min, 250 m
+            } else {
+                // Case 3: Valid transfer to a local agency -> Free
+                leg.cost = 0;
+                leg.requiresUserInput = false;
+                leg.discountAmount = fares[leg.provider][ageGroup];
+                leg.discountText = "OneFare (Free Transfer)";
+            }
+        }
+    }
+    renderLegCards(legs);
+}
 
-1:49 PM
-1:45 PM
-Mcbride Ave At Erindale Station Rd
-Bus66 E Credit Woodlands To City Centre
-33 min (34 stops) 4 min early · Stop ID: 1118 ·
-1:46 PM
-Mcbride Ave At Carillion Ave
-1:46 PM
-Mcbride Ave At Ellengale Dr
-1:47 PM
-Mcbride Ave At The Credit Woodlands
-1:48 PM
-The Credit Woodlands At Erinmore Dr
-1:48 PM
-The Credit Woodlands At Queenston Dr
-1:49 PM
-Queenston Dr At Fellmore Dr
-1:50 PM
-Queenston Dr At Ashcroft Cres
-1:50 PM
-Queenston Dr At Chalice Cres
-1:51 PM
-Queenston Dr At Freeport Dr
-1:51 PM
-Queenston Dr At The Credit Woodlands
-1:52 PM
-Burnhamthorpe Rd At The Credit Woodlands
-1:53 PM
-Burnhamthorpe Rd At Erindale Go Station
-1:54 PM
-Burnhamthorpe Rd At Central Pky
-1:55 PM
-Burnhamthorpe Rd At Erindale Station Rd
-1:57 PM
-Erindale Station Rd South Of Burnhamthorpe Rd
-1:57 PM
-Central Pky At Erindale Station Rd
-1:58 PM
-Central Pky At Semenyk Crt
-1:59 PM
-Central Pky At Hawkestone Rd
-2:00 PM
-Central Pky At Wolfedale Rd
-2:02 PM
-Central Pky At Mavis Rd
-2:04 PM
-Grand Park Dr At Central Pky
-2:05 PM
-Grand Park Dr South Of Webb Dr
-2:06 PM
-Webb Dr At Redmond Rd
-2:07 PM
-Webb Dr At Confederation Pky
-2:09 PM
-Webb Dr At Duke Of York Blvd
-2:10 PM
-Burnhamthorpe Rd At Living Arts Dr
-2:11 PM
-Living Arts Dr At City Centre Dr
-2:12 PM
-Living Arts Dr At Princess Royal Dr
-2:12 PM
-Living Arts Dr At Prince Of Wales Dr
-2:13 PM
-Living Arts Dr At Square One Dr
-2:14 PM
-Living Arts Dr At Rathburn Rd
-2:14 PM
-Rathburn Rd At Duke Of York Blvd
-2:16 PM
-City Centre Transit Terminal Drop Off
-Service run by MiWay
-Ticket information
-2:18 PM
-City Centre Transit Terminal Platform H
-WalkWalk
-About 3 min
+const renderLegCards = (legs) => {
+    outputEl.innerHTML = ""; // Clear any previous results
+    
+    const cardsHTML = legs.map((leg, index) => {
+        let fareUI = "";
+        
+        // If it's a GO Transit leg, render an input field
+        if (leg.requiresUserInput) {
+            fareUI = `
+                <div class="fare-input-group">
+                    <label>Enter GO Fare: $</label>
+                    <input type="number" step="0.01" min="0" class="go-cost-input" data-index="${index}" placeholder="0.00">
+                    <br>
+                    <span class="leg-final-cost" id="leg-cost-${index}">$0.00</span>
+                    <a target="_blank" href="https://www.gotransit.com/en/plan-your-trip">Calculate Here</a>
+                </div>
+            `;
+        } else {
+            // Otherwise, just show the flat fare
+            fareUI = `<div class="leg-final-cost">Cost: $${leg.cost.toFixed(2)}</div>`;
+        }
 
-2:55 PM
-Square One, Mississauga
-Bus25C - U of Waterloo
-1 hr 15 min (3 stops) on time · Stop ID: 100133 ·
-3:57 PM
-University Ave. E. @ Weber St. N.
-4:00 PM
-Wilfrid Laurier University
-Service run by GO Transit
-Ticket information
-4:10 PM
-University of Waterloo Terminal
-WalkWalk
-About 4 min, 350 m
+        let discountUI = leg.discountText ? `<div class="discount-text">Save $${leg.discountAmount.toFixed(2)} from ${leg.discountText}</div>` : "";
 
-4:14 PM
-Engineering 7 (E7)
-200 University Ave W, Waterloo, ON N2L 3G5
-`
+        return `
+            <div class="leg-card">
+                <h3>${leg.provider} - ${leg.mode} ${leg.route}</h3>
+                <p><b>Board:</b> ${leg.boardTime} @ ${leg.boardStop}</p>
+                <p><b>Alight:</b> ${leg.alightTime} @ ${leg.alightStop || "Destination"}</p>
+                <div class="fare-section">
+                    ${fareUI}
+                    ${discountUI}
+                </div>
+            </div>
+        `;
+    }).join("");
 
-parseInput(test1);
-// parseInput(test2);
+    // Add the Grand Total at the bottom
+    const totalHTML = `
+        <div class="grand-total-card">
+            <h3>Total Trip Fare: <span id="grand-total">$0.00</span></h2>
+            <h3>Total One Fare Savings: <span id="total-savings">$0.00</span></h2>
+        </div>
+    `;
+
+    // Inject it all into the DOM
+    outputEl.innerHTML = cardsHTML + totalHTML;
+
+    // Attach the event listeners and run the initial total calculation
+    attachGoInputListeners(legs);
+    updateGrandTotal(legs);
+};
+
+const attachGoInputListeners = (legs) => {
+    const inputs = document.querySelectorAll(".go-cost-input");
+    
+    inputs.forEach(input => {
+        input.addEventListener("input", (e) => {
+            const legIndex = e.target.getAttribute("data-index");
+            const leg = legs[legIndex];
+            
+            // Get the value typed, fallback to 0 if they delete everything
+            const inputtedFare = parseFloat(e.target.value) || 0;
+            
+            // Subtract the OneFare discount, ensuring it never drops below $0
+            leg.cost = Math.max(0, inputtedFare - leg.discountAmount);
+            
+            // Update the display for this specific leg so the user sees the math working
+            const legCostDisplay = document.getElementById(`leg-cost-${legIndex}`);
+            if (legCostDisplay) {
+                legCostDisplay.innerText = `Cost: $${leg.cost.toFixed(2)}`;
+            }
+            
+            // Recalculate the grand total
+            updateGrandTotal(legs);
+        });
+    });
+};
+
+const updateGrandTotal = (legs) => {
+    const total = legs.reduce((sum, leg) => sum + (leg.cost || 0), 0);
+    const totalEl = document.getElementById("grand-total");
+    const totalSavings = legs.reduce((sum, leg) => sum + (leg.discountAmount || 0), 0);
+    const savingsEl = document.getElementById("total-savings");
+
+    if (totalEl) {
+        totalEl.innerText = `$${total.toFixed(2)}`;
+        savingsEl.innerText = `$${totalSavings.toFixed(2)}`;
+    }
+};
 
 
-console.log(minutesPassed(parseInput(test1)[0].boardTime,parseInput(test2)[0].boardTime));
+
