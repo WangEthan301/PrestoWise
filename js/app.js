@@ -63,6 +63,39 @@ const parseInput = rawText => {
     return legs;
 }
 
+const timeToMinutes = (timeStr) => {
+    // split time and modifier
+    const [time, modifier] = timeStr.trim().split(' ');
+    let [hours, minutes] = time.split(':').map(Number);
+
+    // mormalize 12-hour clock
+    if (hours === 12) {
+        hours = 0;
+    }
+    
+    if (modifier.toUpperCase() === 'PM') {
+        hours += 12; // Add 12 hours for PM times
+    }
+
+    // return minutes
+    return (hours * 60) + minutes;
+};
+
+const minutesPassed = (startTimeStr, endTimeStr) => {
+    const startMins = timeToMinutes(startTimeStr);
+    const endMins = timeToMinutes(endTimeStr);
+
+    let diff = endMins - startMins;
+
+    // add 24 hrs if time diff negative
+    if (diff < 0) {
+        diff += 1440; 
+    }
+
+    return diff;
+};
+
+
 
 const test1 = `
 9:53 AM
@@ -238,3 +271,6 @@ Engineering 7 (E7)
 
 parseInput(test1);
 // parseInput(test2);
+
+
+console.log(minutesPassed(parseInput(test1)[0].boardTime,parseInput(test2)[0].boardTime));
