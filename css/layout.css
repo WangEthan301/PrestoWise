@@ -32,14 +32,6 @@ header  {
     border-radius: 16px;
 }
 
-.summary > *{
-    display: inline;
-}
-
-.flex   {
-    display: flex;
-}
-
 /* Footer Disclaimer */
 footer p {
     margin: 0 auto;

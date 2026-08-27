@@ -4,8 +4,6 @@ const inputEl = document.getElementById("input");
 const outputEl = document.getElementById("output");
 const outputSection = document.getElementById("output-section");
 const ageGroupEl = document.getElementById("age-group");
-const instructionsEl = document.querySelector(".summary");
-const instructionVideo = document.getElementById("instruction-video");
 const detailsEl = document.querySelector("details");
 
 
@@ -37,8 +35,6 @@ inputEl.addEventListener("input", () => {
     calculateFare(parseInput(userInput));
 
 });
-
-instructionsEl.addEventListener("click",() => instructionVideo.currentTime = 0);
 
 
 const parseInput = rawText => {
