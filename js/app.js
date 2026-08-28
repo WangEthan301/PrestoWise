@@ -1,26 +1,9 @@
 import { fares } from "./fares.js";
 
-const inputEl = document.getElementById("input");
+// const inputEl = document.getElementById("input");
 const outputEl = document.getElementById("output");
 const outputSection = document.getElementById("output-section");
 const ageGroupEl = document.getElementById("age-group");
-const detailsEl = document.querySelector("details");
-
-
-detailsEl.addEventListener('toggle', (event) => {
-    if (detailsEl.open) {
-        detailsEl.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start' 
-        });
-    }
-});
-
-
-
-
-
-
 
 let ageGroup = ageGroupEl.value;
 ageGroupEl.addEventListener("change", () => {
@@ -28,13 +11,13 @@ ageGroupEl.addEventListener("change", () => {
     calculateFare(parseInput(userInput));
 });
 
-let userInput = inputEl.value;
-inputEl.addEventListener("input", () => {
-    console.log(true);
-    userInput = inputEl.value;
-    calculateFare(parseInput(userInput));
+// let userInput = inputEl.value;
+// inputEl.addEventListener("input", () => {
+//     console.log(true);
+//     userInput = inputEl.value;
+//     calculateFare(parseInput(userInput));
 
-});
+// });
 
 
 const parseInput = rawText => {

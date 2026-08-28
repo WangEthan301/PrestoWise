@@ -23,7 +23,7 @@
     color: #334155;
 }
 
-#input {
+.input {
     width: 100%;
     padding: 14px;
     border: 2px solid #e2e8f0;
@@ -34,7 +34,7 @@
     transition: border-color 0.2s;
 }
 
-#input:focus {
+.input:focus {
     outline: none;
     border-color: #bad879;
 }
