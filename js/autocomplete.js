@@ -31,3 +31,26 @@ destinationAutocomplete.includedRegionCodes = ['ca'];
 destinationAutocomplete.requestedFields = ['id', 'displayName']; //limit for cost savings
 
 document.getElementById("destination-trip").appendChild(destinationAutocomplete);
+
+
+
+// LISTENERS ------
+startAutocomplete.addEventListener('gmp-select', async ({ placePrediction }) => {
+    startPlaceId = placePrediction.placeId;
+    const startName = String(placePrediction.mainText);
+    console.log("Start set to:", startName, "ID:", startPlaceId);
+    tryToRoute();
+});
+
+destinationAutocomplete.addEventListener('gmp-select', async ({ placePrediction }) => {
+    destinationPlaceId = placePrediction.placeId;
+    const destinationName = String(placePrediction.mainText);
+    console.log("Destination set to:", destinationName, "ID:", destinationPlaceId);
+    tryToRoute();
+});
+
+function tryToRoute() {
+    if (startPlaceId && destinationPlaceId) {
+        console.log("Ready to find route from", startPlaceId, "to", destinationPlaceId);
+    }
+}
