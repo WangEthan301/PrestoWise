@@ -1,4 +1,4 @@
-// * file autocomplete.js
+// * file trip.js
 
 // Request needed libraries.
 const { PlaceAutocompleteElement } = await google.maps.importLibrary('places');
