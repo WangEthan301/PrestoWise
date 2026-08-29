@@ -49,8 +49,56 @@ destinationAutocomplete.addEventListener('gmp-select', async ({ placePrediction 
     tryToRoute();
 });
 
+
+// TIME
+
+const timeEl = document.getElementById("trip-time");
+const modeEl = document.getElementById("time-mode");
+
+let timingMode = "leaveBy"; 
+let selectedDate = new Date(); // Default to now
+
+
+// format Date object (YYYY-MM-DDTHH:MM) for init and handling invalid
+function formatNowForInput() {
+    const now = new Date();
+    // Adjust for local timezone offset
+    now.setMinutes(now.getMinutes()-now.getTimezoneOffset());
+    return now.toISOString().slice(0, 16);
+}
+
+timeEl.value = formatNowForInput();
+
+modeEl.addEventListener("change", () => {
+    timingMode = modeEl.value;
+    console.log("Mode changed to:", timingMode);
+    tryToRoute();
+});
+
+// 3. Listen for Time changes
+timeEl.addEventListener("change", () => {
+    const now = new Date();
+
+    selectedDate = new Date(timeEl.value);
+    
+    // reset to now if date is invalid or in the past
+    if (isNaN(selectedDate.getTime()) || selectedDate.getTime() < now.getTime()) {
+        console.error("Date invalid or in past:",selectedDate.getTime());
+        selectedDate = now;
+        timeEl.value = formatNowForInput();
+        return;
+    }
+    
+    console.log("Time changed to:", selectedDate.toLocaleString());
+    tryToRoute();
+});
+
+
 function tryToRoute() {
     if (startPlaceId && destinationPlaceId) {
-        console.log("Ready to find route from", startPlaceId, "to", destinationPlaceId);
+        console.log("--- Routing Request ---");
+        console.log("From:", startPlaceId);
+        console.log("To:", destinationPlaceId);
+        console.log("Timing:", timingMode, selectedDate);
     }
 }
