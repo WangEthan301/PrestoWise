@@ -1,5 +1,7 @@
 // * file trip.js
 
+import { getRoutes } from "./routing.js";
+
 // Request needed libraries.
 const { PlaceAutocompleteElement } = await google.maps.importLibrary('places');
 
@@ -100,5 +102,6 @@ function tryToRoute() {
         console.log("From:", startPlaceId);
         console.log("To:", destinationPlaceId);
         console.log("Timing:", timingMode, selectedDate);
+        getRoutes(startPlaceId,destinationPlaceId,timingMode,selectedDate);
     }
 }
