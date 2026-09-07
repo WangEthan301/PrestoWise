@@ -32,6 +32,24 @@ header  {
     border-radius: 16px;
 }
 
+#timing-container   {
+    margin-top: 5px;
+}
+
+#trip-controls,#route-trip,#next-route,#prev-route  {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+#route-trip {
+    margin-right: 5px;
+}
+
+#prev-route {
+    margin-left: 5px;
+}
+
 #route-indexEl  {
     display: inline;
 }

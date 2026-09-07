@@ -23,36 +23,46 @@
     color: #334155;
 }
 
-.input {
-    width: 100%;
-    padding: 14px;
-    border: 2px solid #e2e8f0;
-    border-radius: 10px;
-    font-family: inherit;
-    font-size: 0.95rem;
-    resize: vertical;
-    transition: border-color 0.2s;
-}
-
-.input:focus {
-    outline: none;
-    border-color: #bad879;
-}
-
 #age-group {
     width: 100%;
     padding: 14px;
+}
+
+/* focus-ring border is the part making the border blue on top of custom color set below */
+gmp-place-autocomplete::part(focus-ring)  { 
+    display: none;
+}
+
+#age-group, gmp-place-autocomplete  {
     border: 2px solid #e2e8f0;
     border-radius: 10px;
     font-family: inherit;
-    font-size: 1rem;
     background-color: #fff;
     cursor: pointer;
+    transition: border 0.4s ease-in;
+    font-size: 1rem;
+    color:black;
 }
 
-#age-group:focus {
-    outline: none;
-    border-color: #bad879;
+#age-group:is(:hover, :focus), gmp-place-autocomplete:is(:hover, :focus)  {
+    outline:none;
+    border: 2px solid #bad879;
+}
+
+.trip-input  {
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    font-family: inherit;
+    background-color: #fff;
+    cursor: pointer;
+    transition: border 0.4s ease-in;
+    font-size: 1rem;
+    color:black;
+}
+
+.trip-input:is(:hover, :focus) {
+    outline:none;
+    border: 1px solid #bad879;
 }
 
 button,input    {
@@ -72,4 +82,3 @@ button:disabled {
   cursor: not-allowed;
   opacity: 0.6;
 }
-

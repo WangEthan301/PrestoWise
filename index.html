@@ -36,11 +36,11 @@
                         <div id="destination-trip"></div>
                     </div>
                     <div id="timing-container">
-                        <select id="time-mode">
+                        <select class="trip-input" id="time-mode">
                             <option value="leaveBy">Leave By</option>
                             <option value="arriveBy">Arrive By</option>
                         </select>
-                        <input type="datetime-local" id="trip-time">
+                        <input class="trip-input" type="datetime-local" id="trip-time">
                     </div>
 				</section>
 				<section>
@@ -53,7 +53,7 @@
 					</select>
 				</section>
 			</div>
-            <section>
+            <section id="trip-controls">
                 <button id="route-trip">Route Trip</button>
                 <button id="prev-route" disabled>&lt</button>
                 <p id="route-indexEl">0/0</p>
