@@ -33,6 +33,7 @@ ageGroupEl.addEventListener("change", () => {
 routeTripBtn.setAttribute("disabled", "true");
 nextRouteBtn.setAttribute("disabled","true");
 prevRouteBtn.setAttribute("disabled","true");
+outputSection.setAttribute("hidden","true");
 
 const incrementRouteIndex = () => {
   if (!routeData?.length) return;
@@ -62,6 +63,8 @@ prevRouteBtn.addEventListener("click",decrementRouteIndex);
 
 async function tryToRoute() {
     if (startPlaceId && destinationPlaceId) {
+        outputSection.removeAttribute("hidden");
+        showSkeletonCards();
         nextRouteBtn.removeAttribute("disabled");
         prevRouteBtn.removeAttribute("disabled");
         routeIndex = 0;
@@ -76,6 +79,20 @@ async function tryToRoute() {
 }
 
 routeTripBtn.addEventListener("click",tryToRoute);
+
+const showSkeletonCards = () => {
+    outputEl.innerHTML = `
+        <div class="skeleton-card">
+            <div class="skeleton-line title"></div>
+            <div class="skeleton-line body"></div>
+            <div class="skeleton-line body short"></div>
+            <div class="skeleton-line divider"></div>
+            <div class="skeleton-line fare"></div>
+            <div class="skeleton-line discount"></div>
+        </div>
+    `;
+    outputSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
 
 
 const timeToMinutes = (timeStr) => {

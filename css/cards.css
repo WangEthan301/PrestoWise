@@ -117,3 +117,32 @@
     margin: 0 6px;
     display: inline-block;
 }
+
+/* Skeleton Loader */
+.skeleton-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 6px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.skeleton-line {
+    background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.skeleton-line.title { height: 28px; width: 70%; }
+.skeleton-line.body { height: 16px; width: 100%; }
+.skeleton-line.body.short { width: 60%; }
+.skeleton-line.divider { height: 1px; background: #cbd5e1; animation: none; margin: 15px 0; }
+.skeleton-line.fare { height: 24px; width: 45%; }
+.skeleton-line.discount { height: 20px; width: 80%; margin-top: 10px; }
