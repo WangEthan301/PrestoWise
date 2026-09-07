@@ -37,6 +37,8 @@ export async function initTripInputs()   {
 
     document.getElementById("destination-trip").appendChild(destinationAutocomplete);
 
+    
+    const routeTripBtn = document.getElementById("route-trip");
 
 
     // LISTENERS ------
@@ -44,12 +46,18 @@ export async function initTripInputs()   {
         startPlaceId = placePrediction.placeId;
         const startName = String(placePrediction.mainText);
         console.log("Start set to:", startName, "ID:", startPlaceId);
+        if(startPlaceId && destinationPlaceId)  {
+            routeTripBtn.removeAttribute("disabled");
+        }
     });
 
     destinationAutocomplete.addEventListener('gmp-select', async ({ placePrediction }) => {
         destinationPlaceId = placePrediction.placeId;
         const destinationName = String(placePrediction.mainText);
         console.log("Destination set to:", destinationName, "ID:", destinationPlaceId);
+        if(startPlaceId && destinationPlaceId)  {
+            routeTripBtn.removeAttribute("disabled");
+        }
     });
 
 

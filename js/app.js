@@ -30,6 +30,7 @@ ageGroupEl.addEventListener("change", () => {
     }
 });
 
+routeTripBtn.setAttribute("disabled", "true");
 nextRouteBtn.setAttribute("disabled","true");
 prevRouteBtn.setAttribute("disabled","true");
 
