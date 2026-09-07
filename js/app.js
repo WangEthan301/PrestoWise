@@ -166,8 +166,8 @@ const renderstepCards = (steps) => {
         let discountUI = step.discountText ? `<div class="discount-text">Save $${step.discountAmount.toFixed(2)} from ${step.discountText}</div>` : "";
 
         return `
-            <div class="step-card" data-provider="${step.provider}">
-                <h3>${step.provider} - ${getModeIconHTML(step.mode)} ${step.route}</h3>
+            <div style="border-left-color: ${step.color};" class="step-card" data-provider="${step.provider}">
+                <h3 style="color: ${step.color};">${step.provider} - ${getModeIconHTML(step.mode)} ${step.route}</h3>
                 <p><b>Board:</b> ${step.boardTime} @ ${step.boardStop}</p>
                 <p><b>Alight:</b> ${step.alightTime} @ ${step.alightStop || "Destination"}</p>
                 <div class="fare-section">
