@@ -1,15 +1,44 @@
 import { fares } from "./fares.js";
+import { getRoutes } from "./routing.js";
+import { parseRouteData } from "./parser.js";
+import {
+  initTripInputs,
+  startPlaceId,
+  destinationPlaceId,
+  timingMode,
+  selectedDate,
+} from "./trip.js";
 
 // const inputEl = document.getElementById("input");
 const outputEl = document.getElementById("output");
 const outputSection = document.getElementById("output-section");
 const ageGroupEl = document.getElementById("age-group");
+const routeTripBtn = document.getElementById("route-trip");
+
+initTripInputs();
+
+let routeData;
+let routeIndex = 0;
 
 let ageGroup = ageGroupEl.value;
 ageGroupEl.addEventListener("change", () => {
     ageGroup = ageGroupEl.value;
-    calculateFare(parseInput(userInput));
+    calculateFare();
 });
+
+async function tryToRoute() {
+    if (startPlaceId && destinationPlaceId) {
+        console.log("--- Routing Request ---");
+        console.log("From:", startPlaceId);
+        console.log("To:", destinationPlaceId);
+        console.log("Timing:", timingMode, selectedDate);
+        routeData = await getRoutes(startPlaceId,destinationPlaceId,timingMode,selectedDate);
+        routeData = parseRouteData(routeData);
+        calculateFare();
+    }
+}
+
+routeTripBtn.addEventListener("click",tryToRoute);
 
 
 const timeToMinutes = (timeStr) => {
@@ -44,67 +73,67 @@ const minutesPassed = (startTimeStr, endTimeStr) => {
     return diff;
 };
 
-const hasGoTransit = legs => legs.some(leg => leg.provider === "GO Transit");
+const hasGoTransit = steps => steps.some(step => step.provider === "GO Transit");
 
-const calculateFare = parsedInput =>    {
+function calculateFare()   {
 
-    const legs = [...parsedInput];
+    const steps = routeData[routeIndex];
 
     let transferWindow = 120;
-    let transferWindowBegin = legs[0].boardTime;
+    let transferWindowBegin = steps[0].boardTime;
     let activeLocalFare = 0;
 
 
-    for(let i = 0; i < legs.length; i++)    {
-        const leg = legs[i];
-        let passedTime = minutesPassed(transferWindowBegin, leg.boardTime);
+    for(let i = 0; i < steps.length; i++)    {
+        const step = steps[i];
+        let passedTime = minutesPassed(transferWindowBegin, step.boardTime);
         let isValidTransfer = passedTime < transferWindow;
-        const isGoTransit = leg.provider === "GO Transit";
+        const isGoTransit = step.provider === "GO Transit";
 
-        // If the transfer expired, reset the clock and limits for this new leg
+        // If the transfer expired, reset the clock and limits for this new step
         if (!isValidTransfer) {
-            transferWindowBegin = leg.boardTime;
+            transferWindowBegin = step.boardTime;
             transferWindow = isGoTransit ? 180 : 120;
             activeLocalFare = 0; 
         }
 
         if (isGoTransit) {
-            // Case 1: GO Transit Leg
-            leg.cost = 0; 
-            leg.requiresUserInput = true;
+            // Case 1: GO Transit step
+            step.cost = 0; 
+            step.requiresUserInput = true;
             
             // If valid transfer, apply the local fare we paid earlier as a discount
-            leg.discountAmount = isValidTransfer ? activeLocalFare : 0;
-            leg.discountText = leg.discountAmount > 0 
+            step.discountAmount = isValidTransfer ? activeLocalFare : 0;
+            step.discountText = step.discountAmount > 0 
                 ? `One Fare (Local Transit Fare Discount)` 
                 : "Enter full GO fare";
             
-            // GO Transit expands the window to 3 hours (180 mins) for any subsequent legs
+            // GO Transit expands the window to 3 hours (180 mins) for any subsequent steps
             if (!isValidTransfer || i === 0) {
                 transferWindow = 180;
             }
 
         } else {
             if (i === 0 || !isValidTransfer) {
-                // Case 2: First leg (no GO) OR an expired transfer window -> Pay flat fare
-                leg.cost = fares[leg.provider][ageGroup]; 
-                leg.requiresUserInput = false;
-                leg.discountAmount = 0;
-                leg.discountText = "";
+                // Case 2: First step (no GO) OR an expired transfer window -> Pay flat fare
+                step.cost = fares[step.provider][ageGroup]; 
+                step.requiresUserInput = false;
+                step.discountAmount = 0;
+                step.discountText = "";
                 
                 // Store this fare in case they transfer to GO later (deduct)
-                activeLocalFare = leg.cost; 
+                activeLocalFare = step.cost; 
 
             } else {
                 // Case 3: Valid transfer to a local agency -> Free
-                leg.cost = 0;
-                leg.requiresUserInput = false;
-                leg.discountAmount = fares[leg.provider][ageGroup];
-                leg.discountText = "OneFare (Free Transfer)";
+                step.cost = 0;
+                step.requiresUserInput = false;
+                step.discountAmount = fares[step.provider][ageGroup];
+                step.discountText = "OneFare (Free Transfer)";
             }
         }
     }
-    renderLegCards(legs);
+    renderstepCards(steps);
 
     outputSection.scrollIntoView({ 
         behavior: 'smooth', 
@@ -112,35 +141,35 @@ const calculateFare = parsedInput =>    {
     });
 }
 
-const renderLegCards = (legs) => {
+const renderstepCards = (steps) => {
     outputEl.innerHTML = ""; // Clear any previous results
     
-    const cardsHTML = legs.map((leg, index) => {
+    const cardsHTML = steps.map((step, index) => {
         let fareUI = "";
         
-        // If it's a GO Transit leg, render an input field
-        if (leg.requiresUserInput) {
+        // If it's a GO Transit step, render an input field
+        if (step.requiresUserInput) {
             fareUI = `
                 <div class="fare-input-group">
                     <label>Enter GO Fare: $</label>
                     <input type="number" step="0.01" min="0" class="go-cost-input" data-index="${index}" placeholder="0.00">
                     <br>
-                    <span class="leg-final-cost" id="leg-cost-${index}">$0.00</span>
+                    <span class="step-final-cost" id="step-cost-${index}">$0.00</span>
                     <a target="_blank" href="https://www.gotransit.com/en/plan-your-trip">Calculate Here</a>
                 </div>
             `;
         } else {
             // Otherwise, just show the flat fare
-            fareUI = `<div class="leg-final-cost">Cost: $${leg.cost.toFixed(2)}</div>`;
+            fareUI = `<div class="step-final-cost">Cost: $${step.cost.toFixed(2)}</div>`;
         }
 
-        let discountUI = leg.discountText ? `<div class="discount-text">Save $${leg.discountAmount.toFixed(2)} from ${leg.discountText}</div>` : "";
+        let discountUI = step.discountText ? `<div class="discount-text">Save $${step.discountAmount.toFixed(2)} from ${step.discountText}</div>` : "";
 
         return `
-            <div class="leg-card" data-provider="${leg.provider}">
-                <h3>${leg.provider} - ${getModeIconHTML(leg.mode)} ${leg.route}</h3>
-                <p><b>Board:</b> ${leg.boardTime} @ ${leg.boardStop}</p>
-                <p><b>Alight:</b> ${leg.alightTime} @ ${leg.alightStop || "Destination"}</p>
+            <div class="step-card" data-provider="${step.provider}">
+                <h3>${step.provider} - ${getModeIconHTML(step.mode)} ${step.route}</h3>
+                <p><b>Board:</b> ${step.boardTime} @ ${step.boardStop}</p>
+                <p><b>Alight:</b> ${step.alightTime} @ ${step.alightStop || "Destination"}</p>
                 <div class="fare-section">
                     ${fareUI}
                     ${discountUI}
@@ -161,40 +190,40 @@ const renderLegCards = (legs) => {
     outputEl.innerHTML = cardsHTML + totalHTML;
 
     // Attach the event listeners and run the initial total calculation
-    attachGoInputListeners(legs);
-    updateGrandTotal(legs);
+    attachGoInputListeners(steps);
+    updateGrandTotal(steps);
 };
 
-const attachGoInputListeners = (legs) => {
+const attachGoInputListeners = (steps) => {
     const inputs = document.querySelectorAll(".go-cost-input");
     
     inputs.forEach(input => {
         input.addEventListener("input", (e) => {
-            const legIndex = e.target.getAttribute("data-index");
-            const leg = legs[legIndex];
+            const stepIndex = e.target.getAttribute("data-index");
+            const step = steps[stepIndex];
             
             // Get the value typed, fallback to 0 if they delete everything
             const inputtedFare = parseFloat(e.target.value) || 0;
             
             // Subtract the OneFare discount, ensuring it never drops below $0
-            leg.cost = Math.max(0, inputtedFare - leg.discountAmount);
+            step.cost = Math.max(0, inputtedFare - step.discountAmount);
             
-            // Update the display for this specific leg so the user sees the math working
-            const legCostDisplay = document.getElementById(`leg-cost-${legIndex}`);
-            if (legCostDisplay) {
-                legCostDisplay.innerText = `Cost: $${leg.cost.toFixed(2)}`;
+            // Update the display for this specific step so the user sees the math working
+            const stepCostDisplay = document.getElementById(`step-cost-${stepIndex}`);
+            if (stepCostDisplay) {
+                stepCostDisplay.innerText = `Cost: $${step.cost.toFixed(2)}`;
             }
             
             // Recalculate the grand total
-            updateGrandTotal(legs);
+            updateGrandTotal(steps);
         });
     });
 };
 
-const updateGrandTotal = (legs) => {
-    const total = legs.reduce((sum, leg) => sum + (leg.cost || 0), 0);
+const updateGrandTotal = (steps) => {
+    const total = steps.reduce((sum, step) => sum + (step.cost || 0), 0);
     const totalEl = document.getElementById("grand-total");
-    const totalSavings = legs.reduce((sum, leg) => sum + (leg.discountAmount || 0), 0);
+    const totalSavings = steps.reduce((sum, step) => sum + (step.discountAmount || 0), 0);
     const savingsEl = document.getElementById("total-savings");
 
     if (totalEl) {

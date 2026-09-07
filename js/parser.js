@@ -14,7 +14,6 @@ export function parseRouteData(routeData)  {
             // adds index if the step object has transitDetails
             Object.hasOwn(step, "transitDetails") && requiredIndexes.push(index);
         });
-        console.log(requiredIndexes);
         
         // required info: boardTime,boardStop,mode,color,route,provider,alightTime,alightStop
         let parsedSteps = [];

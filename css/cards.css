@@ -1,5 +1,5 @@
-/* Cost Breakdown & Leg Cards */
-.leg-card {
+/* Cost Breakdown & step Cards */
+.step-card {
     background: #f8fafc;
     border: 1px solid #e2e8f0;
     border-left: 6px solid #bad879;
@@ -9,56 +9,56 @@
 }
 
 /* TTC - Official Red */
-.leg-card[data-provider="TTC"] {
+.step-card[data-provider="TTC"] {
     border-left-color: #da291c;
 }
-.leg-card[data-provider="TTC"] h3 {
+.step-card[data-provider="TTC"] h3 {
     color: #da291c;
 }
 
 /* MiWay - Official Orange */
-.leg-card[data-provider="MiWay"] {
+.step-card[data-provider="MiWay"] {
     border-left-color: #ff6600;
 }
-.leg-card[data-provider="MiWay"] h3 {
+.step-card[data-provider="MiWay"] h3 {
     color: #ff6600;
 }
 
 /* GO Transit - Official Green */
-.leg-card[data-provider="GO Transit"] {
+.step-card[data-provider="GO Transit"] {
     border-left-color: #00853f;
 }
-.leg-card[data-provider="GO Transit"] h3 {
+.step-card[data-provider="GO Transit"] h3 {
     color: #00853f;
 }
 
 /* Brampton Transit - Orange */
-.leg-card[data-provider="Brampton Transit"] {
+.step-card[data-provider="Brampton Transit"] {
     border-left-color: #e35205;
 }
 
 /* YRT (York Region Transit) - Blue */
-.leg-card[data-provider="York Region Transit"] {
+.step-card[data-provider="York Region Transit"] {
     border-left-color: #005596;
 }
 
 /* Oakville Transit - Navy Blue */
-.leg-card[data-provider="Oakville Transit"] {
+.step-card[data-provider="Oakville Transit"] {
     border-left-color: #003b71;
 }
 
 /* Durham Region Transit - Dark Green */
-.leg-card[data-provider="Durham Region Transit"] {
+.step-card[data-provider="Durham Region Transit"] {
     border-left-color: #006837;
 }
 
-.leg-card h3 {
+.step-card h3 {
     margin-top: 0;
     color: #0f172a;
     font-size: 1.15rem;
 }
 
-.leg-card p {
+.step-card p {
     margin: 8px 0;
     color: #475569;
     font-size: 0.95rem;
@@ -112,7 +112,7 @@
     text-decoration: underline;
 }
 
-.leg-final-cost {
+.step-final-cost {
     font-size: 1.2rem;
     font-weight: 700;
     color: #0f172a;
