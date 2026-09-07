@@ -32,6 +32,10 @@ header  {
     border-radius: 16px;
 }
 
+#route-indexEl  {
+    display: inline;
+}
+
 /* Footer Disclaimer */
 footer p {
     margin: 0 auto;

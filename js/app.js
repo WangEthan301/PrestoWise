@@ -9,11 +9,13 @@ import {
   selectedDate,
 } from "./trip.js";
 
-// const inputEl = document.getElementById("input");
 const outputEl = document.getElementById("output");
 const outputSection = document.getElementById("output-section");
 const ageGroupEl = document.getElementById("age-group");
 const routeTripBtn = document.getElementById("route-trip");
+const nextRouteBtn = document.getElementById("next-route");
+const prevRouteBtn = document.getElementById("prev-route");
+const routeIndexEl = document.getElementById("route-indexEl");
 
 initTripInputs();
 
@@ -23,18 +25,49 @@ let routeIndex = 0;
 let ageGroup = ageGroupEl.value;
 ageGroupEl.addEventListener("change", () => {
     ageGroup = ageGroupEl.value;
-    calculateFare();
+    if (routeData?.length) {
+        calculateFare();
+    }
 });
+
+const incrementRouteIndex = () => {
+  if (!routeData?.length) return;
+    if(routeIndex<routeData.length-1) { // stored as 0 based
+        routeIndex++;
+        updateRouteIndex();
+    }
+}
+
+const decrementRouteIndex = () => {
+  if (!routeData?.length) return;
+    if(routeIndex > 0) { // stored as 0 based
+        routeIndex--;
+        updateRouteIndex();
+    }
+}
+
+const updateRouteIndex = () =>    {
+    if (!routeData?.length) return;
+    calculateFare();
+    // displayed as 1 based
+    routeIndexEl.textContent = `${routeIndex+1}/${routeData.length}`;
+}
+
+nextRouteBtn.addEventListener("click",incrementRouteIndex);
+prevRouteBtn.addEventListener("click",decrementRouteIndex);
 
 async function tryToRoute() {
     if (startPlaceId && destinationPlaceId) {
+        nextRouteBtn.removeAttribute("disabled");
+        prevRouteBtn.removeAttribute("disabled");
+        routeIndex = 0;
         console.log("--- Routing Request ---");
         console.log("From:", startPlaceId);
         console.log("To:", destinationPlaceId);
         console.log("Timing:", timingMode, selectedDate);
         routeData = await getRoutes(startPlaceId,destinationPlaceId,timingMode,selectedDate);
         routeData = parseRouteData(routeData);
-        calculateFare();
+        updateRouteIndex(); // Calls calculate fare
     }
 }
 
