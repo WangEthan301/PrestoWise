@@ -11,63 +11,6 @@ ageGroupEl.addEventListener("change", () => {
     calculateFare(parseInput(userInput));
 });
 
-// let userInput = inputEl.value;
-// inputEl.addEventListener("input", () => {
-//     console.log(true);
-//     userInput = inputEl.value;
-//     calculateFare(parseInput(userInput));
-
-// });
-
-
-const parseInput = rawText => {
-
-    const cleanText = rawText.replaceAll("\u202f", ' ').replaceAll(RegExp("\r?\n",'g'), '\n');
-
-    const regexMetadata = /\(\d+\sstops\)|\(non-stop\)/i;
-    const globalRegexMetadata = /\(\d+\sstops\)|\(non-stop\)/ig;
-    let segments = cleanText.split('\n\n').map(l => l.trim()).filter(l => regexMetadata.test(l));
-
-    let legs = [];
-
-    //multiple bus rides in one segment (same alight stop as board stop)
-    const multiLegSegment = /((?:0?[1-9]|1[0-2]):[0-5][0-9] (?:AM|PM))\s(.+?)\s((?:0?[1-9]|1[0-2]):[0-5][0-9] (?:AM|PM))\s*(bus|subway|streetcar|train)\s*(.+)[\s\S]*?Service run by (.+)/i;
-    const singleLegSegment = /((?:0?[1-9]|1[0-2]):[0-5][0-9] (?:AM|PM))\s(.+?)\s(bus|subway|streetcar|train)\s*(.+)[\s\S]*?Service run by (.+)[\s\S]*?((?:0?[1-9]|1[0-2]):[0-5][0-9] (?:AM|PM))\s*(.+)/i;
-
-    for(let i = 0; i < segments.length; i++)    {
-        const match = segments[i].match(singleLegSegment);
-        if (!match) {
-            console.error("Could not parse input");
-            continue;
-        }
-
-        let rides = segments[i].match(globalRegexMetadata).length;
-        if(rides>1) {
-            let lastIndex = 0;
-            for(let j = 0; j < rides-1;j++) {
-                let [full, boardTime,boardStop,alightTime,mode,route,provider] = segments[i].match(multiLegSegment);
-                legs.push({boardTime:boardTime,boardStop:boardStop,alightTime:alightTime,mode:mode,route:route,provider:provider});
-                lastIndex = segments[i].indexOf("Service run by")+1;
-                segments[i] = segments[i].slice(lastIndex);
-                if(j>0) {
-                    legs[j-1].alightStop = boardStop;
-                    //set board stop as previous alight stop
-                }
-            }
-            let [full, boardTime,boardStop,mode, route,provider,alightTime,alightStop] = segments[i].match(singleLegSegment);
-            legs.push({boardTime:boardTime,boardStop:boardStop,alightTime:alightTime,mode:mode,route:route,provider:provider,alightStop:alightStop});
-            legs[rides-2].alightStop = boardStop;
-
-        }
-        else    {
-            let [full, boardTime,boardStop,mode, route,provider,alightTime,alightStop] = segments[i].match(singleLegSegment);
-            legs.push({boardTime:boardTime,boardStop:boardStop,alightTime:alightTime,mode:mode,route:route,provider:provider,alightStop:alightStop});
-        }
-    }
-
-    // console.log(legs);
-    return legs;
-}
 
 const timeToMinutes = (timeStr) => {
     // split time and modifier
