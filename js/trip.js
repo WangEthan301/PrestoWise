@@ -1,6 +1,7 @@
 // * file trip.js
 
 import { getRoutes } from "./routing.js";
+import { parseRouteData } from "./parser.js";
 
 // Request needed libraries.
 const { PlaceAutocompleteElement } = await google.maps.importLibrary('places');
@@ -96,12 +97,13 @@ timeEl.addEventListener("change", () => {
 });
 
 
-function tryToRoute() {
+async function tryToRoute() {
     if (startPlaceId && destinationPlaceId) {
         console.log("--- Routing Request ---");
         console.log("From:", startPlaceId);
         console.log("To:", destinationPlaceId);
         console.log("Timing:", timingMode, selectedDate);
-        getRoutes(startPlaceId,destinationPlaceId,timingMode,selectedDate);
+        const routeData = await getRoutes(startPlaceId,destinationPlaceId,timingMode,selectedDate);
+        parseRouteData(routeData);
     }
 }

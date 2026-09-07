@@ -24,9 +24,8 @@ export async function getRoutes(start, destination, timingMode, selectedDate)   
 
             /* data i want back (specified for cost savings)
                 https://developers.google.com/maps/documentation/routes/reference/rest/v2/TopLevel/computeRoutes?authuser=3#routelegsteptransitdetails
-                https://developers.google.com/maps/documentation/routes/reference/rest/v2/TopLevel/computeRoutes?authuser=3#routelegsteplocalizedvalues
             */
-            'X-Goog-FieldMask': 'routes.legs.steps.transitDetails,routes.legs.localizedValues',
+            'X-Goog-FieldMask': 'routes.legs.steps.transitDetails',
         },
         body: JSON.stringify(requestBody)
     });
