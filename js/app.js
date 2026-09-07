@@ -30,6 +30,9 @@ ageGroupEl.addEventListener("change", () => {
     }
 });
 
+nextRouteBtn.setAttribute("disabled","true");
+prevRouteBtn.setAttribute("disabled","true");
+
 const incrementRouteIndex = () => {
   if (!routeData?.length) return;
     if(routeIndex<routeData.length-1) { // stored as 0 based
