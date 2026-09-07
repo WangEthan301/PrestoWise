@@ -74,12 +74,12 @@ const timeToMinutes = (timeStr) => {
     const [time, modifier] = timeStr.trim().split(' ');
     let [hours, minutes] = time.split(':').map(Number);
 
-    // mormalize 12-hour clock
+    // normalize 12-hour clock
     if (hours === 12) {
         hours = 0;
     }
     
-    if (modifier.toUpperCase() === 'PM') {
+    if (modifier === 'p.m') {
         hours += 12; // Add 12 hours for PM times
     }
 

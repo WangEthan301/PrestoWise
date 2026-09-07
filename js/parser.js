@@ -1,7 +1,8 @@
 // * file parser.js
 
 export function parseRouteData(routeData)  {
-    const routes = routeData.routes; // Array of routes (step by step transit details)
+    // Array of routes (step by step transit details)
+    const routes = routeData.routes; 
 
     let parsedRoutes = [];
     routes.map(routeObj => {
@@ -20,13 +21,15 @@ export function parseRouteData(routeData)  {
         for(let index of requiredIndexes)   {
             const transitDetails = leg.steps[index].transitDetails;
             console.log(transitDetails);
-            const boardTime = transitDetails.localizedValues.departureTime.time.text;
+            // Change Narrow No-Break Space to regular space
+            const boardTime = transitDetails.localizedValues.departureTime.time.text.replace("\u202f", ' ');
             const boardStop = transitDetails.stopDetails.departureStop.name;
             const mode = transitDetails.transitLine.vehicle.name.text;
             const color = transitDetails.transitLine.color;
             const route = transitDetails.transitLine.nameShort + " " + transitDetails.transitLine.name;
             const provider = transitDetails.transitLine.agencies[0].name; // should always only be 1 agency
-            const alightTime = transitDetails.localizedValues.arrivalTime.time.text;
+            // Change Narrow No-Break Space to regular space
+            const alightTime = transitDetails.localizedValues.arrivalTime.time.text.replace("\u202f", ' ');
             const alightStop = transitDetails.stopDetails.arrivalStop.name;
             
             parsedSteps.push({boardTime:boardTime,boardStop:boardStop,mode:mode,color:color,route:route,provider:provider,alightTime:alightTime,alightStop:alightStop})
