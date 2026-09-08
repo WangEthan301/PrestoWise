@@ -1,3 +1,5 @@
+// * file js/app.js
+
 import { fares } from "./fares.js";
 import { getRoutes } from "./routing.js";
 import { parseRouteData } from "./parser.js";

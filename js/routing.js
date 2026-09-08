@@ -1,3 +1,5 @@
+// * file js/routing.js
+
 export async function getRoutes(start, destination, timingMode, selectedDate)   {
 
     const endpointComputeRoutes = "https://routes.googleapis.com/directions/v2:computeRoutes";

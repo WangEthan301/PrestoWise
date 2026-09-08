@@ -1,4 +1,4 @@
-// * file parser.js
+// * file js/parser.js
 
 export function parseRouteData(routeData)  {
     // Array of routes (step by step transit details)

@@ -1,4 +1,4 @@
-// * file trip.js
+// * file js/trip.js
 
 // global variables to hold place ids
 let startPlaceId = null;

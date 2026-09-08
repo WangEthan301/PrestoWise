@@ -1,3 +1,5 @@
+// * file js/fares.js
+
 export const fares = {
     "GO Transit": {
     },
