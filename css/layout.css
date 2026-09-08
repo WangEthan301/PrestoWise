@@ -61,6 +61,10 @@ footer p {
     line-height: 1.5;
 }
 
+.content-wrapper { 
+    flex: 1; 
+}
+
 footer {
     text-align: center;
     padding: 30px 20px;
@@ -72,12 +76,4 @@ footer {
 footer .copyright {
     font-weight: 600;
     margin-bottom: 12px;
-}
-
-footer .disclaimer {
-    font-size: 0.8rem;
-    color: #94a3b8;
-    max-width: 800px;
-    margin: 0 auto;
-    line-height: 1.5;
 }

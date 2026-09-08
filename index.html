@@ -17,57 +17,58 @@
 </head>
 
 <body>
-    <header>
-        <h1 id="title">PrestoWise</h1>
-        <p id="subtitle">Calculate cross agency transit fares and Presto One Fare savings instantly</p>
-    </header>
-    <main>
-        <section class="main-section">
-            <h2>Input</h2>
-			<div class="user-info">
-                <section id="trip">
-                    <h3 class="input-h3">Trip</h3>
-                    <div class="search-container">
-                        <label>Start:</label>
-                        <div id="start-trip"></div>
-                    </div>
-                    <div class="search-container">
-                        <label>End:</label>
-                        <div id="destination-trip"></div>
-                    </div>
-                    <div id="timing-container">
-                        <select class="trip-input" id="time-mode">
-                            <option value="leaveBy">Leave By</option>
-                            <option value="arriveBy">Arrive By</option>
+    <div class="content-wrapper">
+        <header>
+            <h1 id="title">PrestoWise</h1>
+            <p id="subtitle">Calculate cross agency transit fares and Presto One Fare savings instantly</p>
+        </header>
+        <main>
+            <section class="main-section">
+                <h2>Input</h2>
+                <div class="user-info">
+                    <section id="trip">
+                        <h3 class="input-h3">Trip</h3>
+                        <div class="search-container">
+                            <label>Start:</label>
+                            <div id="start-trip"></div>
+                        </div>
+                        <div class="search-container">
+                            <label>End:</label>
+                            <div id="destination-trip"></div>
+                        </div>
+                        <div id="timing-container">
+                            <select class="trip-input" id="time-mode">
+                                <option value="leaveBy">Leave By</option>
+                                <option value="arriveBy">Arrive By</option>
+                            </select>
+                            <input class="trip-input" type="datetime-local" id="trip-time">
+                        </div>
+                    </section>
+                    <section>
+                        <h3 class="input-h3">Age Group</h3>
+                        <select id="age-group">
+                            <option selected value="Adult">Adult</option>
+                            <option value="Senior">Senior &gt;65</option>
+                            <option value="Youth">Youth 13-19</option>
+                            <option value="Child">Child &lt;12</option>
                         </select>
-                        <input class="trip-input" type="datetime-local" id="trip-time">
-                    </div>
-				</section>
-				<section>
-					<h3 class="input-h3">Age Group</h3>
-					<select id="age-group">
-                        <option selected value="Adult">Adult</option>
-                        <option value="Senior">Senior &gt;65</option>
-                        <option value="Youth">Youth 13-19</option>
-                        <option value="Child">Child &lt;12</option>
-					</select>
-				</section>
-			</div>
-            <section id="trip-controls">
-                <button id="route-trip" disabled>Route Trip</button>
-                <button id="prev-route" disabled>&lt</button>
-                <p id="route-indexEl">0/0</p>
-                <button id="next-route" disabled>&gt</button>
+                    </section>
+                </div>
+                <section id="trip-controls">
+                    <button id="route-trip" disabled>Route Trip</button>
+                    <button id="prev-route" disabled>&lt</button>
+                    <p id="route-indexEl">0/0</p>
+                    <button id="next-route" disabled>&gt</button>
+                </section>
             </section>
-        </section>
-        <section class="main-section" id="output-section" hidden>
-            <h2>Cost Breakdown</h2>
-            <section id="output">
+            <section class="main-section" id="output-section" hidden>
+                <h2>Cost Breakdown</h2>
+                <section id="output">
 
+                </section>
             </section>
-        </section>
-    </main>
-
+        </main>
+    </div>
     <footer>
         <p class="copyright">© 2026 . Ethan Wang. Released as open-source software under the MIT License</p>
         <p>Disclaimer: PrestoWise is an independent, open-source calculator tool and is not affiliated with, endorsed by, or partnered with Metrolinx, PRESTO, or any transit agencies (TTC, MiWay, GO Transit, Oakville Transit, York Region Transit, Burlington Transit, Hamilton Street Railway, Brampton Transit, Durham Region Transit). All trademarks belong to their respective owners.</p>
