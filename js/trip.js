@@ -47,7 +47,7 @@ export async function initTripInputs()   {
         const startName = String(placePrediction.mainText);
         console.log("Start set to:", startName, "ID:", startPlaceId);
         if(startPlaceId && destinationPlaceId)  {
-            routeTripBtn.removeAttribute("disabled");
+            routeTripBtn.disabled = false;
         }
     });
 
@@ -56,7 +56,7 @@ export async function initTripInputs()   {
         const destinationName = String(placePrediction.mainText);
         console.log("Destination set to:", destinationName, "ID:", destinationPlaceId);
         if(startPlaceId && destinationPlaceId)  {
-            routeTripBtn.removeAttribute("disabled");
+            routeTripBtn.disabled = false;
         }
     });
 

@@ -1,6 +1,13 @@
 // * file js/parser.js
 
 export function parseRouteData(routeData)  {
+
+    // Check if routes exists and has length
+    if (!routeData || !routeData.routes || routeData.routes.length === 0) {
+        return []; 
+    }
+    
+
     // Array of routes (step by step transit details)
     const routes = routeData.routes; 
 

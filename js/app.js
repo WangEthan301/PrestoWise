@@ -38,7 +38,7 @@ prevRouteBtn.setAttribute("disabled","true");
 outputSection.setAttribute("hidden","true");
 
 const incrementRouteIndex = () => {
-  if (!routeData?.length) return;
+    if (!routeData?.length) return;
     if(routeIndex<routeData.length-1) { // stored as 0 based
         routeIndex++;
         updateRouteIndex();
@@ -46,7 +46,7 @@ const incrementRouteIndex = () => {
 }
 
 const decrementRouteIndex = () => {
-  if (!routeData?.length) return;
+    if (!routeData?.length) return;
     if(routeIndex > 0) { // stored as 0 based
         routeIndex--;
         updateRouteIndex();
@@ -58,6 +58,9 @@ const updateRouteIndex = () =>    {
     calculateFare();
     // displayed as 1 based
     routeIndexEl.textContent = `${routeIndex+1}/${routeData.length}`;
+
+    nextRouteBtn.disabled = routeIndex >= routeData.length-1;
+    prevRouteBtn.disabled = routeIndex <= 0;
 }
 
 nextRouteBtn.addEventListener("click",incrementRouteIndex);
@@ -65,10 +68,16 @@ prevRouteBtn.addEventListener("click",decrementRouteIndex);
 
 async function tryToRoute() {
     if (startPlaceId && destinationPlaceId) {
+
         outputSection.removeAttribute("hidden");
+
+        // Handle same start and end location (save api credits)
+        if(startPlaceId === destinationPlaceId) {
+            outputEl.innerHTML = `<p class="error-msg">No transit routes found for this trip. Try using different start and end locations.</p>`;
+            return; // stop routing request from being sent
+        }
+
         showSkeletonCards();
-        nextRouteBtn.removeAttribute("disabled");
-        prevRouteBtn.removeAttribute("disabled");
         routeIndex = 0;
         console.log("--- Routing Request ---");
         console.log("From:", startPlaceId);
@@ -76,6 +85,13 @@ async function tryToRoute() {
         console.log("Timing:", timingMode, selectedDate);
         routeData = await getRoutes(startPlaceId,destinationPlaceId,timingMode,selectedDate);
         routeData = parseRouteData(routeData);
+
+        // Handle the "No Routes Found" state
+        if (routeData.length === 0) {
+            outputEl.innerHTML = `<p class="error-msg">No transit routes found for this trip. Try a different time or location.</p>`;
+            return;
+        }
+
         updateRouteIndex(); // Calls calculate fare
     }
 }
@@ -107,7 +123,7 @@ const timeToMinutes = (timeStr) => {
         hours = 0;
     }
     
-    if (modifier === 'p.m') {
+    if (modifier.toLowerCase().includes("p")) {
         hours += 12; // Add 12 hours for PM times
     }
 
@@ -190,11 +206,6 @@ function calculateFare()   {
         }
     }
     renderstepCards(steps);
-
-    outputSection.scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'start' 
-    });
 }
 
 const renderstepCards = (steps) => {
