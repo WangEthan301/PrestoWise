@@ -33,6 +33,10 @@ gmp-place-autocomplete::part(focus-ring)  {
     display: none;
 }
 
+gmp-place-autocomplete::part(prediction-item)   {
+    color: #fff;
+}
+
 #age-group, gmp-place-autocomplete  {
     border: 2px solid #e2e8f0;
     border-radius: 10px;
