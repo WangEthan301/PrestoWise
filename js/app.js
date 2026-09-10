@@ -32,10 +32,10 @@ ageGroupEl.addEventListener("change", () => {
     }
 });
 
-routeTripBtn.setAttribute("disabled", "true");
-nextRouteBtn.setAttribute("disabled","true");
-prevRouteBtn.setAttribute("disabled","true");
-outputSection.setAttribute("hidden","true");
+routeTripBtn.disabled = true;
+nextRouteBtn.disabled = true;
+prevRouteBtn.disabled = true;
+outputSection.hidden = true;
 
 const incrementRouteIndex = () => {
     if (!routeData?.length) return;
@@ -77,6 +77,7 @@ async function tryToRoute() {
             return; // stop routing request from being sent
         }
 
+        routeTripBtn.disabled = true; // prevent request spamming
         showSkeletonCards();
         routeIndex = 0;
         console.log("--- Routing Request ---");
@@ -93,6 +94,9 @@ async function tryToRoute() {
         }
 
         updateRouteIndex(); // Calls calculate fare
+
+        
+        routeTripBtn.disabled = false;
     }
 }
 

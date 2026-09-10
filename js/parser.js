@@ -26,7 +26,6 @@ export function parseRouteData(routeData)  {
         let parsedSteps = [];
         for(let index of requiredIndexes)   {
             const transitDetails = leg.steps[index].transitDetails;
-            console.log(transitDetails);
             // Change Narrow No-Break Space to regular space
             const boardTime = transitDetails.localizedValues.departureTime.time.text.replace("\u202f", ' ');
             const boardStop = transitDetails.stopDetails.departureStop.name;
@@ -42,6 +41,5 @@ export function parseRouteData(routeData)  {
         }
         parsedRoutes.push(parsedSteps);
     });
-    console.log(parsedRoutes);
     return parsedRoutes;
 }
