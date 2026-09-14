@@ -1,4 +1,4 @@
-config.js
+config.dev.js
 .vscode/settings.json
 .vercel
 .env*
