@@ -32,12 +32,26 @@ header  {
     border-radius: 16px;
 }
 
-.summary > *{
-    display: inline;
+#timing-container   {
+    margin-top: 5px;
 }
 
-.flex   {
-    display: flex;
+#trip-controls,#route-trip,#next-route,#prev-route  {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+#route-trip {
+    margin-right: 5px;
+}
+
+#prev-route {
+    margin-left: 5px;
+}
+
+#route-indexEl  {
+    display: inline;
 }
 
 /* Footer Disclaimer */
@@ -45,6 +59,10 @@ footer p {
     margin: 0 auto;
     font-size: 0.85rem;
     line-height: 1.5;
+}
+
+.content-wrapper { 
+    flex: 1; 
 }
 
 footer {
@@ -58,12 +76,4 @@ footer {
 footer .copyright {
     font-weight: 600;
     margin-bottom: 12px;
-}
-
-footer .disclaimer {
-    font-size: 0.8rem;
-    color: #94a3b8;
-    max-width: 800px;
-    margin: 0 auto;
-    line-height: 1.5;
 }

@@ -22,4 +22,8 @@ body {
     background-color: #f8fafc;
     color: #1e293b;
     padding-bottom: 0; /* Lets footer sit flush at the bottom */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
 }

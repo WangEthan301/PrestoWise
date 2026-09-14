@@ -1,0 +1,3 @@
+let CONFIG = {
+    MAPS_API_KEY: "AIzaSyDH4DIsrs12ffy5RdEubP6Gy8Ir03cY2m8"
+}
