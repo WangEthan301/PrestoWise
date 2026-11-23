@@ -8,18 +8,20 @@ PrestoWise is an open-source web application designed for commuters who use mult
 
 ---
 
-## 🌐 Demo
-
-Try PrestoWise here: https://prestowise.vercel.app/
-
----
-
 ## 🎯 The Problem It Solves
 
 * **Google Maps shows multi-agency routes, but not cross-agency fares:** Navigation apps give great step-by-step directions across the GTHA, but leave riders guessing when calculating total ticket and transfer costs across different transit systems.
 * **One Fare rules are complex to calculate across agencies:** Commuters struggle to track discount windows, local fare deductions, and transfer limits when jumping between different networks (such as TTC, GO Transit, YRT, or MiWay).
 
 **PrestoWise** bridges this gap by allowing riders to compare multiple Google Maps transit itineraries, calculate their total cross-agency trip costs, and see the amount saved through Ontario's One Fare Program.
+
+---
+
+## 🗺️ How It Works
+
+1. **Plan a Trip:** Enter your origin and destination directly into the web app.
+2. **Route Trip:** Click "Route Trip" to request best transit routes from Google Maps. 
+3. **Navigate Between Routes:** Click on the arrows to instantly navigate between routes and their step-by-step fare breakdown and total One Fare savings.
 
 ---
 
@@ -47,14 +49,6 @@ Try PrestoWise here: https://prestowise.vercel.app/
 * **JavaScript** — Routing, Trip parsing, Fare calculations, and One Fare logic
 * **Google Maps APIs** — Uses the **Places API** for location autocomplete and **Routes API** for finding transit routes
 * **Vercel** — Hosting and deployment
-
----
-
-## 🗺️ How It Works
-
-1. **Plan a Trip:** Enter your origin and destination directly into the web app.
-2. **Route Trip:** Click "Route Trip" to request best transit routes from Google Maps. 
-3. **Navigate Between Routes:** Click on the arrows to instantly navigate between routes and their step-by-step fare breakdown and total One Fare savings.
 
 ---
 
